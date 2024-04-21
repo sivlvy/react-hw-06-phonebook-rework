@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/react-hw-06-phonebook-rework/static/css/main.34dd90a4.css",
+    "main.js": "/react-hw-06-phonebook-rework/static/js/main.e16b0b13.js",
+    "index.html": "/react-hw-06-phonebook-rework/index.html",
+    "main.34dd90a4.css.map": "/react-hw-06-phonebook-rework/static/css/main.34dd90a4.css.map",
+    "main.e16b0b13.js.map": "/react-hw-06-phonebook-rework/static/js/main.e16b0b13.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.34dd90a4.css",
+    "static/js/main.e16b0b13.js"
+  ]
+}
