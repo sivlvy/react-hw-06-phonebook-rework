@@ -7,8 +7,8 @@ import { nanoid } from 'nanoid';
 import { Notify } from 'notiflix';
 import { useSelector, useDispatch } from 'react-redux';
 import { getAllContacts, getFilteredContacts } from '../redux/selectors';
-import { addContact, deleteContact } from '../redux/contacts/contacts-actions';
-import { setFilter } from '../redux/filter/filter-actions';
+import { addContact, deleteContact } from '../redux/contacts/contacts-slice';
+import { setFilter } from '../redux/filter/filter-slice';
 
 export const App = () => {
 	const contacts = useSelector(getAllContacts);

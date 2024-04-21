@@ -8,12 +8,14 @@ const initialValues = {
 
 const schema = Yup.object().shape({
 	name: Yup.string().required().min(3),
-	phone: Yup.number()
-		.typeError("That doesn't look like a phone number")
-		.positive("A phone number can't start with a minus")
-		.integer("A phone number can't include a decimal point")
-		.min(8)
-		.required('A phone number is required'),
+	phone: Yup.string()
+		.min(7)
+		.max(18)
+		.required()
+		.matches(
+			/^\+?(\d{2}-?\d{3}-?\d{3}-?\d{2}-?\d{2})$|^\d{7}$|^\d{10}$|^\+?\d{12}$/,
+			`Number must have 7, 10 or 12 digits`
+		),
 });
 
 const ContactForm = ({ onSubmit }) => {
