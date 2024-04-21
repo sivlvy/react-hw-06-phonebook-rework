@@ -2,29 +2,27 @@ import ContactForm from './ContactForm/ContactForm';
 import Container from './Container/Container';
 import Filter from './Filter/Filter';
 import ContactsList from './ContactsList/ContactsList';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { nanoid } from 'nanoid';
 import { Notify } from 'notiflix';
+import { useSelector, useDispatch } from 'react-redux';
+import { getAllContacts, getFilteredContacts } from '../redux/selectors';
+import { addContact, deleteContact } from '../redux/contacts/contacts-actions';
+import { setFilter } from '../redux/filter/filter-actions';
 
 export const App = () => {
-	const [contacts, setContacts] = useState(() => {
-		const storedContacts = localStorage.getItem('contacts');
-		return storedContacts ? JSON.parse(storedContacts) : [];
-	});
-
-	const [filter, setFilter] = useState('');
+	const contacts = useSelector(getAllContacts);
+	const filteredContacts = useSelector(getFilteredContacts);
+	const dispatch = useDispatch();
 
 	useEffect(() => {
 		localStorage.setItem('contacts', JSON.stringify(contacts));
 	}, [contacts]);
 
-	const handleChange = e => {
-		setFilter(e.currentTarget.value);
-	};
+	const handleChange = ({ target }) => dispatch(setFilter(target.value));
 
 	const formSubmitHandler = data => {
 		const newContact = { id: nanoid(), ...data };
-
 		const inContacts = contacts.some(
 			({ name }) => name.toLowerCase() === newContact.name.toLowerCase()
 		);
@@ -33,31 +31,18 @@ export const App = () => {
 			return;
 		}
 		Notify.success(`${newContact.name} was added to contacts`);
-		setContacts([...contacts, newContact]);
+		dispatch(addContact(newContact));
 	};
 
-	const visibleContacts = contacts.filter(contact =>
-		contact.name.toLowerCase().includes(filter.toLowerCase())
-	);
-
-	const deleteContact = contactId => {
-		const deletedContact = contacts.find(contact => contact.id === contactId);
-		if (!deletedContact) {
-			return;
-		}
-
-		const updatedContacts = contacts.filter(
-			contact => contact.id !== contactId
-		);
-		setContacts(updatedContacts);
-
-		Notify.success(`${deletedContact.name} was deleted from contacts`);
+	const onDeleteContact = contactId => {
+		dispatch(deleteContact(contactId));
+		Notify.success(`Was deleted from contacts`);
 	};
 
 	return (
 		<Container>
 			<div className="flex justify-between">
-				<div className="">
+				<div>
 					<h1 className="font-bold text-xl text-center font-mono mb-10">
 						Phonebook
 					</h1>
@@ -67,8 +52,8 @@ export const App = () => {
 					<h2 className="font-bold text-center text-xl mb-10">Contacts</h2>
 					<Filter onChange={handleChange} />
 					<ContactsList
-						contacts={visibleContacts}
-						onDeleteContact={deleteContact}
+						contacts={filteredContacts}
+						onDeleteContact={onDeleteContact}
 					/>
 				</div>
 			</div>
